@@ -1,0 +1,47 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: partner-partner-endorser-transaction
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: partner-ns
+spec:
+  releaseName: partner-partner-endorser-transaction
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-ledger-txn
+    git: ssh://git@github.com/sauveer/indy-deployer.git
+    ref: develop
+  values:
+    metadata:
+      name: partner-partner-endorser-transaction
+      namespace: partner-ns
+    network:
+      name: baf
+    genesis:
+      pool: Z2VuZXNpcy9wb29sX3RyYW5zYWN0aW9uc19nZW5lc2lz
+      domain: ZG9tYWluL2RvbWFpbl90cmFuc2FjdGlvbnNfZ2VuZXNpcw==
+      add_org: False
+    image:
+      cli:
+        name: partner
+        repository: index.docker.io/hyperledgerlabs/indy-ledger-txn:latest
+        pullSecret: regcred
+    vault:
+      address: http://aaa20205874044d9eb4ce1b69352648a-441162845.ap-south-1.elb.amazonaws.com:8200
+      role: rw
+      serviceAccountName: partner-admin-vault-auth
+      auth_path: kubernetes-partner-admin-auth
+    organization:
+      name: partner
+      adminIdentity:
+        name: authority-trustee
+        did: 42VGM8FXS2CR91WfQ5C2rf
+        path: authority/trustees
+      newIdentity:
+        name: partner-endorser
+        role: ENDORSER
+        did: T8n7jQJaw31s58ijwYUEWF
+        verkey: FF9j8inX49m946W9buFbFjYmP3hNLcemWQLxugRyGjF5
+        path: partner/endorsers
+    node:
+      name: partner
