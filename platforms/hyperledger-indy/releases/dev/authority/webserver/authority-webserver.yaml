@@ -24,7 +24,7 @@ spec:
         repository: alpine:3.9.4
       server:
         name: authority-webserver
-        repository: index.docker.io/sownak/von-network-base:1.11.0
+        repository: index.docker.io/hyperledgerlabs/von-network-base:1.11.0
     service:
       port: 8000
     vault:
