@@ -30,10 +30,10 @@ spec:
         service: 15023
         endpoint: 15024
       
-      address: provider-endorser.indy.entrustient.net
+      address: a9440c437d1224888bc04cf766e27782-1582269307.ap-south-1.elb.amazonaws.com
       
-      ledger: http://authority-webserver.indy.entrustient.net:15010
-      genesis: http://authority-webserver.indy.entrustient.net:15010/genesis
+      ledger: http://a9440c437d1224888bc04cf766e27782-1582269307.ap-south-1.elb.amazonaws.com:15010
+      genesis: http://a9440c437d1224888bc04cf766e27782-1582269307.ap-south-1.elb.amazonaws.com:15010/genesis
     vault:
       address: http://ad2ef6c6065c640129296516a9d2bc03-1686572389.ap-south-1.elb.amazonaws.com:8200
       serviceAccountName: provider-provider-endorser-vault-auth
