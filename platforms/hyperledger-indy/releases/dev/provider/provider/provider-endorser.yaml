@@ -1,0 +1,48 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: provider-endorser
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: provider-ns
+spec:
+  releaseName: provider-endorser-faber
+  chart:
+    path: examples/identity-app/charts/faber
+    git: ssh://git@github.com/sauveer/indy-deployer.git
+    ref: develop
+  values:
+    metadata:
+      namespace: provider-ns
+      name: provider-endorser
+    organization:
+      name: provider
+    image:
+      pullSecret: regcred
+      init:
+        name: certs-init
+        repository: alpine:3.9.4
+      agent:
+        name: provider-endorser
+        repository: index.docker.io/sownak/aries-agents:1.11.0
+    service:
+      ports: 
+        service: 15023
+        endpoint: 15024
+      
+      address: provider-endorser.indy.entrustient.net
+      
+      ledger: http://authority-webserver.indy.entrustient.net:15010
+      genesis: http://authority-webserver.indy.entrustient.net:15010/genesis
+    vault:
+      address: http://ad2ef6c6065c640129296516a9d2bc03-1686572389.ap-south-1.elb.amazonaws.com:8200
+      serviceAccountName: provider-provider-endorser-vault-auth
+      authPath: kubernetes-provider-provider-endorser-auth
+      endorserName: provider-endorser
+      role: ro
+    storage:
+      size: 128Mi
+      className: provider-aws-baremetal-storageclass
+    proxy:
+      
+      provider: "ambassador"
