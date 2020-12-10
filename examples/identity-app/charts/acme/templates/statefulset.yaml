@@ -85,7 +85,7 @@ spec:
             export ENDORSER_SEED=$(cat /keys/seed);
             
             cd demo;
-            python -m demo.runners.acme -p {{ $.Values.service.ports.service }} --address {{ $.Values.service.address }};
+            python -m demo.runners.acme -p {{ $.Values.service.ports.service }} --address {{ $.Values.service.address }} ;
       imagePullSecrets:
         - name: "{{ $.Values.image.pullSecret }}"
   volumeClaimTemplates:
