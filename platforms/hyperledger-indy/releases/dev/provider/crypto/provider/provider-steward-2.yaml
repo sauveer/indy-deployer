@@ -1,0 +1,31 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: provider-provider-steward-2
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: provider-ns
+spec:
+  releaseName: provider-provider-steward-2
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-key-mgmt
+    git: ssh://git@github.com/sauveer/indy-deployer.git
+    ref: develop
+  values:
+    metadata:
+      name: provider-provider-steward-2
+      namespace: provider-ns
+    network:
+      name: baf
+    image:
+      name: provider
+      repository: index.docker.io/hyperledgerlabs/indy-key-mgmt:1.11.0
+      pullSecret: regcred
+    vault:
+      address: http://a6850d0335da240939edd35945d6d551-1933730648.us-east-1.elb.amazonaws.com:8200
+      keyPath: provider.stewards
+      identity: provider-steward-2
+      auth_path: kubernetes-provider-admin-auth
+    account:
+      service: provider-admin-vault-auth
+      role: rw
