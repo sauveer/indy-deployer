@@ -41,8 +41,6 @@ spec:
 
             export LEDGER_URL=http://authority-webserver.indy.entrustient.net:15010;
 
-            export ENDORSER_SEED=f1MBrlv2iihr8URuuuRg8H7cIc02OtP5;
-
-            python -m demo.runners.acme -p {{ $.Values.service.ports.service }} --address {{ $.Values.service.address }};
+            python -m demo.runners.alice --no-auto -p {{ $.Values.service.ports.service }} --address {{ $.Values.service.address }};
       imagePullSecrets:
         - name: "{{ $.Values.image.pullSecret }}"
