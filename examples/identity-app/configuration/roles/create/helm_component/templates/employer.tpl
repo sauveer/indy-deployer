@@ -32,10 +32,10 @@ spec:
 {% if organization.cloud_provider == 'minikube' %}     
       address: {{ minikube_ip }}
 {% else %}      
-      address: aab51db0805fd4662be723c6381cbc83-ad707894e3714862.elb.ap-south-1.amazonaws.com
+      address: {{ component_name }}.{{ organization.external_url_suffix }}
 {% endif %}      
-      ledger: http://aab51db0805fd4662be723c6381cbc83-ad707894e3714862.elb.ap-south-1.amazonaws.com:15010
-      genesis: http://aab51db0805fd4662be723c6381cbc83-ad707894e3714862.elb.ap-south-1.amazonaws.com:15010/genesis
+      ledger: {{ trustee_url }}
+      genesis: {{ trustee_url }}/genesis
     vault:
       address: {{ vault.url }}
       serviceAccountName: {{ service_account }}
