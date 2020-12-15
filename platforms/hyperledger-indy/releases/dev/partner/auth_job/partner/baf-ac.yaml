@@ -1,0 +1,36 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: partner-baf-ac-auth-job
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: partner-ns
+spec:
+  releaseName: partner-baf-ac-auth-job
+  chart:
+    path: platforms/hyperledger-indy/charts/indy-auth-job
+    git: ssh://git@github.com/sauveer/indy-deployer.git
+    ref: develop
+  values:
+    metadata:
+      name: partner-baf-ac-auth-job
+      namespace: partner-ns
+    network:
+      name: baf
+      kubernetes_url: https://89F2F5C6C5AA5B0F45873F639EDF7BC0.gr7.us-east-1.eks.amazonaws.com
+    image:
+      name: partner
+      repository: alpine:3.9.4
+    vault:
+      address: http://a6850d0335da240939edd35945d6d551-1933730648.us-east-1.elb.amazonaws.com:8200
+      keyPath: partner.baf-ac
+      identity: baf-ac
+      admin_auth_path: kubernetes-partner-admin-auth
+      policy: partner-baf-ac-ro
+      policy_content: path \"/partner/+/+/+/public*\" { capabilities = [ \"read\", \"list\" ] }
+      auth_path: kubernetes-partner-baf-ac-auth
+    account:
+      admin_service: partner-admin-vault-auth
+      admin_role: rw
+      service: partner-baf-ac-vault-auth
+      role: ro
