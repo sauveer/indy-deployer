@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "{{ $.Values.metadata.name }}"
+  namespace: "{{ $.Values.metadata.namespace }}"
+spec:
+  serviceName: "{{ $.Values.metadata.name }}"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "{{ $.Values.metadata.name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ $.Values.metadata.name }}"
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: "{{ $.Values.image.agent.name }}"
+          image: "{{ $.Values.image.agent.repository }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 15074
+            - containerPort: 15073
+          env:
+            - name: ACAPY_GENESIS_FILE
+              value: "{{ $.Values.service.genesis }}"
+            - name: ACAPY_WALLET_SEED
+              value: "{{ $.Values.service.seed }}"
+            - name: ACAPY_WALLET_NAME
+              value: "{{ $.Values.service.wallet.name }}"
+            - name: ACAPY_WALLET_KEY
+              value: "{{ $.Values.service.wallet.key }}"
+            - name: ACAPY_WALLET_TYPE
+              value: "{{ $.Values.service.wallet.type }}"
+            - name: ACAPY_WALLET_STORAGE_TYPE
+              value: "{{ $.Values.service.wallet.storageType }}"
+            - name: ACAPY_WALLET_STORAGE_CONFIG
+              value: "{{ $.Values.service.wallet.storageConfig }}"
+            - name: ACAPY_WALLET_STORAGE_CREDS
+              value: "{{ $.Values.service.wallet.storageCreds }}"
+            - name: ACAPY_ENDPOINT
+              value: "http://localhost:15073"
+            - name: RUST_BACKTRACE
+              value: "1"
+          command:
+          - "bash"
+          - "-c"
+          - >
+            echo 1 | aca-py provision;
+            echo 1 | aca-py start -it http 0.0.0.0 15073 -ot http --admin 0.0.0.0 15074 --admin-insecure-mode --invite --auto-accept-invites --auto-accept-requests --auto-respond-messages --auto-respond-credential-proposal --auto-respond-credential-offer --auto-store-credential --auto-respond-presentation-proposal --auto-respond-credential-request --auto-respond-presentation-request --auto-verify-presentation;            
+      imagePullSecrets:
+        - name: "{{ $.Values.image.pullSecret }}"

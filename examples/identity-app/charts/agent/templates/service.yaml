@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ $.Values.metadata.name }}"
+  namespace: "{{ $.Values.metadata.namespace }}"
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ports:
+  - name: indy-faber-service
+    port: 15074
+    targetPort: 15074
+  - name: indy-faber-endpoint
+    port: 15073
+    targetPort: 15073
+  selector:
+    app: "{{ $.Values.metadata.name }}"
